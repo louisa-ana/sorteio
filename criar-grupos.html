@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Grupos</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  </head>
+  <body
+    class="bg-gradient-to-b from-green-100 to-green-200 h-screen flex flex-col items-center justify-center"
+  >
+    <div
+      class="container mx-auto bg-white p-8 rounded-md shadow-md flex flex-col items-center"
+    >
+      <h2 id="formTitle" class="text-2xl font-semibold mb-4">Criar Grupo</h2>
+
+      <div id="loginFormDiv" class="text-center">
+        <form
+          action="/criar-grupos"
+          method="post"
+          class="w-full max-w-md"
+          onsubmit="return criarGrupo()"
+        >
+          <label for="nomeGrupo" class="block mb-2">Nome do Grupo:</label>
+          <input
+            type="text"
+            id="nomeGrupo"
+            name="nomeGrupo"
+            required
+            class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
+          />
+
+          <label for="descricaoGrupo" class="block mb-2"
+            >Descrição do Grupo:</label
+          >
+          <textarea
+            id="descricaoGrupo"
+            name="descricaoGrupo"
+            rows="4"
+            class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md resize-none"
+          ></textarea>
+
+          <label for="membros" class="block mb-2"
+            >Membros (separados por vírgula):</label
+          >
+          <input
+            type="text"
+            id="membros"
+            name="membros"
+            required
+            class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
+          />
+
+          <button
+            type="submit"
+            class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+          >
+            Criar Grupo
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button
+        id="visualizarGrupos"
+        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mr-4"
+        onclick="visualizarGrupos()"
+      >
+        Visualizar Grupos
+      </button>
+      <button
+        id="sortearIntegrantes"
+        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        onclick="sortearIntegrantes()"
+      >
+        Sortear Integrantes
+      </button>
+    </div>
+
+    <div id="resultadoSorteio" class="mt-4"></div>
+
+    <script>
+      function criarGrupo() {
+        // Lógica para criar o grupo (pode ser uma chamada AJAX ou algo do tipo)
+
+        // Exibindo mensagem de confirmação
+        alert("Grupo criado com sucesso!");
+
+        // Impedindo o formulário de ser enviado
+        return false;
+      }
+
+      function visualizarGrupos() {
+        // Lógica para visualizar grupos (se necessário)
+      }
+
+      function sortearIntegrantes() {
+        var membrosInput = document.getElementById("membros");
+        var membrosArray = membrosInput.value
+          .split(",")
+          .map((member) => member.trim());
+
+        // Lógica para sortear integrantes
+        var resultadoSorteio = document.getElementById("resultadoSorteio");
+        resultadoSorteio.innerHTML = "";
+
+        for (var i = 0; i < membrosArray.length; i++) {
+          var participante = membrosArray[i];
+          var sorteado = "";
+
+          do {
+            sorteado =
+              membrosArray[Math.floor(Math.random() * membrosArray.length)];
+          } while (sorteado === participante);
+
+          resultadoSorteio.innerHTML +=
+            "<p>" + participante + " saiu com " + sorteado + "</p>";
+        }
+      }
+    </script>
+  </body>
+</html>

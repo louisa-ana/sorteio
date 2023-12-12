@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login e Cadastro</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body
+    class="bg-gradient-to-b from-green-100 to-green-300 h-screen flex flex-col items-center justify-center"
+  >
+    <div
+      class="container mx-auto bg-white p-8 rounded-md shadow-md flex flex-col items-center"
+    >
+      <h2 id="formTitle" class="text-2xl font-semibold mb-4">Login</h2>
+
+      <div id="loginFormDiv" class="text-center">
+        <form
+          id="loginForm"
+          class="w-full max-w-md"
+          onsubmit="return validateForm('loginForm')"
+        >
+          <label for="loginEmail" class="block mb-2">Email:</label>
+          <input
+            type="email"
+            id="loginEmail"
+            required
+            class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
+          />
+
+          <label for="loginPassword" class="block mb-2">Senha:</label>
+          <div class="relative">
+            <input
+              type="password"
+              id="loginPassword"
+              required
+              class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
+            />
+            <span
+              onclick="togglePasswordVisibility('loginPassword')"
+              class="absolute right-3 top-2 cursor-pointer"
+            >
+              👁️
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onclick="login()"
+            class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+          >
+            Login
+          </button>
+        </form>
+        <p class="mt-4">
+          Não tem uma conta?
+          <a href="#" onclick="showCadastroForm()" class="text-green-500"
+            >Cadastre-se</a
+          >
+        </p>
+      </div>
+
+      <div id="cadastroFormDiv" style="display: none" class="text-center">
+        <form
+          id="cadastroForm"
+          class="w-full max-w-md"
+          onsubmit="return validateForm('cadastroForm')"
+        >
+          <label for="cadastroEmail" class="block mb-2">Email:</label>
+          <input
+            type="email"
+            id="cadastroEmail"
+            required
+            class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
+          />
+
+          <label for="cadastroUsername" class="block mb-2">Nome:</label>
+          <input
+            type="text"
+            id="cadastroUsername"
+            required
+            class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
+          />
+
+          <label for="cadastroPassword" class="block mb-2">Senha:</label>
+          <div class="relative">
+            <input
+              type="password"
+              id="cadastroPassword"
+              required
+              class="w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
+            />
+            <span
+              onclick="togglePasswordVisibility('cadastroPassword')"
+              class="absolute right-3 top-2 cursor-pointer"
+            >
+              👁️
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onclick="cadastrar()"
+            class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+          >
+            Cadastrar
+          </button>
+        </form>
+        <p class="mt-4">
+          Já tem uma conta?
+          <a href="#" onclick="showLoginForm()" class="text-green-500"
+            >Faça login</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <script>
+      function login() {
+        var email = document.getElementById("loginEmail").value;
+        var password = document.getElementById("loginPassword").value;
+
+        if (!email || !password) {
+          alert("Preencha todos os campos.");
+          return;
+        }
+
+        var storedUser = localStorage.getItem(email);
+        if (storedUser && JSON.parse(storedUser).password === password) {
+          alert("Login bem-sucedido!");
+          window.location.href = "inicio.html";
+        } else {
+          alert("Falha no login. Verifique suas credenciais.");
+        }
+      }
+
+      function cadastrar() {
+        var email = document.getElementById("cadastroEmail").value;
+        var username = document.getElementById("cadastroUsername").value;
+        var password = document.getElementById("cadastroPassword").value;
+
+        if (!email || !username || !password) {
+          alert("Preencha todos os campos.");
+          return;
+        }
+
+        // Verifica se o usuário já existe
+        if (localStorage.getItem(email)) {
+          alert("Usuário já cadastrado. Escolha outro email.");
+          return;
+        }
+
+        // Cria um objeto de usuário e armazena no localStorage
+        var user = { email: email, password: password };
+        localStorage.setItem(email, JSON.stringify(user));
+
+        alert("Cadastro bem-sucedido!");
+        showLoginForm();
+      }
+
+      function showCadastroForm() {
+        document.getElementById("loginFormDiv").style.display = "none";
+        document.getElementById("cadastroFormDiv").style.display = "block";
+        document.getElementById("formTitle").innerText = "Cadastro";
+      }
+
+      function showLoginForm() {
+        document.getElementById("cadastroFormDiv").style.display = "none";
+        document.getElementById("loginFormDiv").style.display = "block";
+        document.getElementById("formTitle").innerText = "Login";
+      }
+
+      function togglePasswordVisibility(inputId) {
+        var passwordInput = document.getElementById(inputId);
+        passwordInput.type =
+          passwordInput.type === "password" ? "text" : "password";
+      }
+
+      function validateForm(formId) {
+        var form = document.getElementById(formId);
+        var inputs = form.querySelectorAll("input[required]");
+        for (var i = 0; i < inputs.length; i++) {
+          if (!inputs[i].value) {
+            alert("Preencha todos os campos.");
+            return false;
+          }
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>
